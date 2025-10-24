@@ -118,8 +118,8 @@ keymap {
         // | SHFT| BRT_UP | BRT_DOWN|   |   |   |   |   |   |   |   |   |
         //                  | OS_CTRL | LALT/LOW | SPC/LIGHT | LGUI/SYM | LCTRL+LOW | RET/FUN |
         bindings = <
-   &kp TAB &trans &trans &trans &trans &trans   &kp TGL_K &kp TGL_U &trans &trans &trans &trans
-   &kp LCTRL &trans &trans &trans &trans &trans   &kp RIPPLE &kp RAIN &kp SNAKE &kp SOL &kp BREATHE &trans
+   &kp TAB &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+   &kp LCTRL &kp TGL_K &kp TGL_U &trans &trans &trans   &kp RIPPLE &kp RAIN &kp SNAKE &kp SOL &kp BREATHE &trans
    &kp LSHFT &kp BRT_UP &kp BRT_DOWN &trans &trans &trans   &trans &trans &trans &trans &trans &trans
                   &os LCTRL
                   &lt 1 &kp LALT

@@ -9,149 +9,127 @@
 #include <dt-bindings/zmk/bt.h>
 
 / {
-    keymap {
-        compatible = "zmk,keymap";
-
-        /*
-         Layer index mapping:
-         0 = base
-         1 = num
-         2 = sym
-         3 = fun
-         4 = light
-        */
-
-        // ------------------------------------------------------------
-        // BASE Layer
-        // ------------------------------------------------------------
-        // |  TAB |  Q  |  W  |  E  |  R  |  T  |       |  Y  |  U  |  I  |  O  |  P  | BSPC |
-        // | CTRL |  A  |  S  |  D  |  F  |  G  |       |  H  |  J  |  K  |  L  |  ;  |  '   |
-        // | CAPS |  Z  |  X  |  C  |  V  |  B  |       |  N  |  M  |  ,  |  .  |  /  | ESC  |
-        //                | OS CTRL | LALT/LWR | SPC/LGT | GUI/SYM | CTRL/LWR | RET/FUN |
-        base {
-                display-name = "Base";
-            bindings = <
-                /* Row 0 */
-                &kp TAB   &kp Q    &kp W    &kp E    &kp R    &kp T          &kp Y    &kp U    &kp I    &kp O    &kp P    &kp BSPC
-                /* Row 1 */
-                &kp LCTRL &kp A    &kp S    &kp D    &kp F    &kp G          &kp H    &kp J    &kp K    &kp L    &kp SCLN &kp SQT
-                /* Row 2 */
-                &kp CAPS  &kp Z    &kp X    &kp C    &kp V    &kp B          &kp N    &kp M    &kp COMMA &kp DOT &kp SLSH &kp ESC
-                /* Thumb row */
-                &os LCTRL
-                &lt 1 &os LALT
-                &lt 4 &kp SPC
-                &lt 2 &kp LGUI
-                &lt 3 &kp LCTRL
-                &lt 5 &kp RET
-            >;
+    behaviors {
+        alt_tab: alt_tab {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LALT &kp TAB>;
         };
-
-        // ------------------------------------------------------------
-        // NUM Layer
-        // ------------------------------------------------------------
-        // |  TAB |  1  |  2  |  3  |  4  |  5  |       |  6  |  7  |  8  |  9  |  0  |  DEL |
-        // | CTRL | BT0 | BT1 | BT2 | BT3 | BT4 |       | LEFT | DOWN | UP | RIGHT |     |     |
-        // | SHFT |  F1 |  F2 |  F3 |  F4 |  F5 |       |  F6  |  F7  |  F8  |  F9  | F10 | F11 |
-        //                | OS CTRL | LALT/LWR | SPC/LGT | GUI/SYM | CTRL/LWR | RET/FUN |
-        num {
-                display-name = "Num";
-            bindings = <
-                /* Row 0 */
-                &kp TAB   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5        &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp DEL
-                /* Row 1 */
-                &kp LCTRL &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4  &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
-                /* Row 2 */
-                &kp LSHFT &kp F1   &kp F2   &kp F3   &kp F4   &kp F5        &kp F6 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11
-                /* Thumb row */
-                &os LCTRL
-                &lt 1 &os LALT
-                &lt 4 &kp SPC
-                &lt 2 &kp LGUI
-                &lt 3 &kp LCTRL
-                &lt 5 &kp RET
-            >;
-        };
-
-        // ------------------------------------------------------------
-        // SYM Layer
-        // ------------------------------------------------------------
-        // |  TAB |  !  |  @  |  #  |  $  |  %  |       |  ^  |  &  |  *  |  (  |  )  | BSPC |
-        // | CTRL |     |     |     |     |     |       |  -  |  =  |  [  |  ]  |  \  |  `   |
-        // | SHFT |     |     |     |     |     |       |  _  |  +  |  {  |  }  |  |  |  ~   |
-        //                | OS CTRL | LALT/LWR | SPC/LGT | GUI/SYM | CTRL/LWR | RET/FUN |
-        sym {
-                display-name = "Sym";
-            bindings = <
-                /* Row 0 */
-                &kp TAB &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT   &kp CARET &kp AMPS &kp ASTR &kp LPAR &kp RPAR &kp BSPC
-                /* Row 1 */
-                &kp LCTRL &trans &trans &trans &trans &trans   &kp MINUS &kp EQUAL &kp LBKT &kp RBKT &kp BSLH &kp GRAVE
-                /* Row 2 */
-                &kp LSHFT &trans &trans &trans &trans &trans   &kp UNDER &kp PLUS &kp LBRC &kp RBRC &kp PIPE &kp TILDE
-                /* Thumb row */
-                &os LCTRL
-                &lt 1 &os LALT
-                &lt 4 &kp SPC
-                &lt 2 &kp LGUI
-                &lt 3 &kp LCTRL
-                &lt 5 &kp RET
-            >;
-        };
-
-        // ------------------------------------------------------------
-        // FUN Layer
-        // ------------------------------------------------------------
-        // |  TAB |     |     |     |     |     |       |     |     |     |     |     |     |
-        // | CTRL |     |     |     |     |     |       | BT_CLR | BT_PAIR | BT0 | BT1 | BT2 | BT3 |
-        // | SHFT |     |     |     |     |     |       | RESET | TRNS | TRNS | TRNS | TRNS | TRNS |
-        //                | OS CTRL | LALT/LWR | SPC/LGT | GUI/SYM | CTRL/LWR | RET/FUN |
-        fun {
-                display-name = "Func";
-            bindings = <
-                /* Row 0 */
-                &kp TAB &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                /* Row 1 */
-                &kp LCTRL &trans &trans &trans &trans &trans  &bt BT_CLR &bt BT_PAIR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3
-                /* Row 2 */
-                &kp LSHFT &trans &trans &trans &trans &trans  &kp RESET &kp TRNS &kp TRNS &kp TRNS &kp TRNS &kp TRNS
-                /* Thumb row */
-                &os LCTRL
-                &lt 1 &os LALT
-                &lt 4 &kp SPC
-                &lt 2 &kp LGUI
-                &lt 3 &kp LCTRL
-                &lt 5 &kp RET
-            >;
-        };
-
-        // ------------------------------------------------------------
-        // LIGHT Layer
-        // ------------------------------------------------------------
-        // |  TAB |     |     |     |     |     |       | TGL_K | TGL_U |     |     |     |     |
-        // | CTRL | TGL_K | TGL_U |     |     |     |       | RIPPLE | RAIN | SNAKE | SOL | BREATHE |     |
-        // | SHFT | BRT_UP | BRT_DOWN |     |     |     |       |     |     |     |     |     |     |
-        //                | OS CTRL | LALT/LWR | SPC/LGT | GUI/SYM | CTRL/LWR | RET/FUN |
-        light {
-                display-name = "Light";
-            bindings = <
-                /* Row 0 */
-                &kp TAB &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                /* Row 1 */
-                &kp LCTRL &kp TGL_K &kp TGL_U &trans &trans &trans   &kp RIPPLE &kp RAIN &kp SNAKE &kp SOL &kp BREATHE &trans
-                /* Row 2 */
-                &kp LSHFT &kp BRT_UP &kp BRT_DOWN &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                /* Thumb row */
-                &os LCTRL
-                &lt 1 &os LALT
-                &lt 4 &kp SPC
-                &lt 2 &kp LGUI
-                &lt 3 &kp LCTRL
-                &lt 5 &kp RET
-            >;
-        };
-
     };
+};
+
+keymap {
+    compatible = "zmk,keymap";
+
+    /*
+     Layer index mapping:
+     0 = base
+     1 = num
+     2 = sym
+     3 = fun
+     4 = light
+    */
+
+    base {
+        display-name = "Base Layer";
+        // -----------------------------------------------------------------------------------------
+        // |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  | BSPC |
+        // | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
+        // | CAPS |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | ESC  |
+        //                  | OS_CTRL | LALT/LOW | SPC/LIGHT | LGUI/SYM | LCTRL+LOW | RET/FUN |
+        bindings = <
+   &kp TAB   &kp Q    &kp W    &kp E    &kp R    &kp T          &kp Y    &kp U    &kp I    &kp O    &kp P    &kp BSPC
+   &kp LCTRL &kp A    &kp S    &kp D    &kp F    &kp G          &kp H    &kp J    &kp K    &kp L    &kp SCLN &kp SQT
+   &kp CAPS  &kp Z    &kp X    &kp C    &kp V    &kp B          &kp N    &kp M    &kp COMMA &kp DOT &kp SLSH &kp ESC
+                  &os LCTRL
+                  &lt 1 &kp LALT
+                  &lt 4 &kp SPC
+                  &lt 2 &kp LGUI
+                  &lt 3 &kp LCTRL
+                  &lt 5 &kp RET
+                        >;
+    };
+
+    num {
+        display-name = "Num Layer";
+        // -----------------------------------------------------------------------------------------
+        // | ALT_TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | DEL |
+        // | CTRL    | BT0 | BT1 | BT2 | BT3 | BT4 |   | LEFT| DOWN| UP  | RIGHT|     |     |
+        // | SHFT    | F1  | F2  | F3  | F4  | F5  |   | F6  | F7  | F8  | F9  | F10 | F11 |
+        //                  | OS_CTRL | LALT/LOW | SPC/LIGHT | LGUI/SYM | LCTRL+LOW | RET/FUN |
+        bindings = <
+   &alt_tab &kp N1   &kp N2   &kp N3   &kp N4   &kp N5      &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp DEL
+   &kp LCTRL &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4  &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
+   &kp LSHFT &kp F1   &kp F2   &kp F3   &kp F4   &kp F5      &kp F6 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11
+                  &os LCTRL
+                  &lt 1 &kp LALT
+                  &lt 4 &kp SPC
+                  &lt 2 &kp LGUI
+                  &lt 3 &kp LCTRL
+                  &lt 5 &kp RET
+                        >;
+    };
+
+    sym {
+        display-name = "Sym Layer";
+        // -----------------------------------------------------------------------------------------
+        // | TAB | ! | @ | # | $ | % |   | ^ | & | * | ( | ) | BSPC |
+        // | CTRL|   |   |   |   |   |   | - | = | [ | ] | \ | ` |
+        // | SHFT|   |   |   |   |   |   | _ | + | { | } | | | ~ |
+        //                  | OS_CTRL | LALT/LOW | SPC/LIGHT | LGUI/SYM | LCTRL+LOW | RET/FUN |
+        bindings = <
+   &kp TAB &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT   &kp CARET &kp AMPS &kp ASTR &kp LPAR &kp RPAR &kp BSPC
+   &kp LCTRL &trans &trans &trans &trans &trans   &kp MINUS &kp EQUAL &kp LBKT &kp RBKT &kp BSLH &kp GRAVE
+   &kp LSHFT &trans &trans &trans &trans &trans   &kp UNDER &kp PLUS &kp LBRC &kp RBRC &kp PIPE &kp TILDE
+                  &os LCTRL
+                  &lt 1 &kp LALT
+                  &lt 4 &kp SPC
+                  &lt 2 &kp LGUI
+                  &lt 3 &kp LCTRL
+                  &lt 5 &kp RET
+                        >;
+    };
+
+    fun {
+        display-name = "Fun Layer";
+        // -----------------------------------------------------------------------------------------
+        // | TAB |   |   |   |   |   |   |   |   |   |   |   |
+        // | CTRL|   |   |   |   |   | BT_CLR | BT_PAIR | BT0 | BT1 | BT2 | BT3 |
+        // | SHFT|   |   |   |   |   | RESET |   |   |   |   |   |
+        //                  | OS_CTRL | LALT/LOW | SPC/LIGHT | LGUI/SYM | LCTRL+LOW | RET/FUN |
+        bindings = <
+   &kp TAB &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+   &kp LCTRL &trans &trans &trans &trans &trans  &bt BT_CLR &bt BT_PAIR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3
+   &kp LSHFT &trans &trans &trans &trans &trans  &kp RESET &kp TRNS &kp TRNS &kp TRNS &kp TRNS &kp TRNS
+                  &os LCTRL
+                  &lt 1 &kp LALT
+                  &lt 4 &kp SPC
+                  &lt 2 &kp LGUI
+                  &lt 3 &kp LCTRL
+                  &lt 5 &kp RET
+                        >;
+    };
+
+    light {
+        display-name = "Light Layer";
+        // -----------------------------------------------------------------------------------------
+        // | TAB |   |   |   |   |   | TGL_K | TGL_U |   |   |   |   |
+        // | CTRL|   |   |   |   |   | RIPPLE| RAIN  | SNAKE| SOL| BREATHE|   |
+        // | SHFT| BRT_UP | BRT_DOWN|   |   |   |   |   |   |   |   |   |
+        //                  | OS_CTRL | LALT/LOW | SPC/LIGHT | LGUI/SYM | LCTRL+LOW | RET/FUN |
+        bindings = <
+   &kp TAB &trans &trans &trans &trans &trans   &kp TGL_K &kp TGL_U &trans &trans &trans &trans
+   &kp LCTRL &trans &trans &trans &trans &trans   &kp RIPPLE &kp RAIN &kp SNAKE &kp SOL &kp BREATHE &trans
+   &kp LSHFT &kp BRT_UP &kp BRT_DOWN &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                  &os LCTRL
+                  &lt 1 &kp LALT
+                  &lt 4 &kp SPC
+                  &lt 2 &kp LGUI
+                  &lt 3 &kp LCTRL
+                  &lt 5 &kp RET
+                        >;
+    };
+
 };
 
 /* BS Corne bodge */

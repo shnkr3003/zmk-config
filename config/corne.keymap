@@ -16,7 +16,7 @@
             bindings = <&kp LALT &kp TAB>;
         };
     };
-};
+
 
 keymap {
     compatible = "zmk,keymap";
@@ -128,8 +128,8 @@ keymap {
                   &lt 3 &kp LCTRL
                   &lt 5 &kp RET
                         >;
+            };
     };
-
 };
 
 /* BS Corne bodge */

@@ -9,7 +9,7 @@
 #include <dt-bindings/zmk/bt.h>
 
 / {
-    behaviors {
+    macros {
         alt_tab: alt_tab {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;

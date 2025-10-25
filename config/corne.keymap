@@ -28,7 +28,10 @@ keymap {
      3 = fun
      4 = light
     */
-
+    base     {
+        display-name = "Base Layer";
+        
+            };
     
         };
 

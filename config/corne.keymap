@@ -71,7 +71,7 @@
             ctrl_shift_r {
                 key-positions = < 23 39 >; // right thumb RSHIFT + RCTRL
                 bindings = < &mo 3 >;
-            }
+            };
 
             // Standard editing combos
             copy {

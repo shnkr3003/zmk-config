@@ -87,7 +87,7 @@
             ctrl_shift_r {
                 key-positions = <  9 10 >; // example positions — adjust to actual physical indices for your build
                 bindings = < &mo 3 >;
-            }
+            };
 
             // Standard editing combos — we preserve common combos here for convenience
             copy {

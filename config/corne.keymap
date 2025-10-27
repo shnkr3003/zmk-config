@@ -5,225 +5,97 @@
  */
 
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/backlight.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/rgb.h>
 
 / {
+    combos { compatible = "zmk,combos"; };
+
     keymap {
         compatible = "zmk,keymap";
 
-        /*
-         vspecial7.5.keymap - full file
-         - Right thumb is RSHIFT on all layers
-         - Space (hold) -> LIGHT (layer 5)
-         - Enter/Return (hold) -> FUN (layer 4)
-         - Ctrl+Shift held -> NAV (layer 3) persistent activation behavior implemented
-         - Home-row mods (A/S/D/F on left, J/K/L/; on right) implemented as behavior entries
-         - NUM is layer 1, SYM is layer 2, NAV is layer 3, FUN is layer 4, LIGHT is layer 5
-         - ASCII diagrams embedded per-layer for clarity (GitHub style)
-        */
+        Base {
+            display-name = "Base";
 
-        // -------------------------
-        // Behaviors / basic macros
-        // -------------------------
-        behaviors {
-            // Simple macro for Alt+Tab (used on NUM top-left)
-            alt_tab {
-                compatible = "zmk,behavior-macro";
-                label = "ALT_TAB";
-                #binding-cells = <2>;
-                bindings = <&kp LALT &kp TAB>;
-            };
-
-            // One-shot Ctrl (thumb)
-            os_ctrl {
-                compatible = "zmk,behavior-oneshot";
-                label = "OS_CTRL";
-                flavor = "oneshot";
-                tap_count = <1>;
-            };
-
-            // Home-row mod behaviors
-            hrm_a { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_A"; bindings = <&kp A &kp LCTRL>; };
-            hrm_s { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_S"; bindings = <&kp S &kp LSHIFT>; };
-            hrm_d { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_D"; bindings = <&kp D &kp LALT>; };
-            hrm_f { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_F"; bindings = <&kp F &kp LGUI>; };
-
-            hrm_j { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_J"; bindings = <&kp J &kp RGUI>; };
-            hrm_k { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_K"; bindings = <&kp K &kp RALT>; };
-            hrm_l { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_L"; bindings = <&kp L &kp RSHIFT>; };
-            hrm_scln { compatible = "zmk,behavior-mod-morph"; #binding-cells = <2>; label = "HRM_SCLN"; bindings = <&kp SCLN &kp RCTRL>; };
-        };
-
-        // -------------------------
-        // Combos
-        // -------------------------
-        combos {
-            compatible = "zmk,combos";
-
-            // LCTRL + LSHIFT -> momentary NAV (layer 3)
-            ctrl_shift_l {
-                key-positions = < 12 28 >; // left thumb LCTRL + left row2 LSHIFT positions
-                bindings = < &mo 3 >;
-            };
-
-            // RCTRL + RSHIFT -> momentary NAV
-            ctrl_shift_r {
-                key-positions = < 23 39 >; // right thumb RSHIFT + RCTRL
-                bindings = < &mo 3 >;
-            };
-
-            // Standard editing combos
-            copy {
-                key-positions = < 1 2 >; 
-                bindings = < &kp C >;
-            };
-            paste {
-                key-positions = < 1 3 >;
-                bindings = < &kp V >;
-            };
-            undo {
-                key-positions = < 1 4 >;
-                bindings = < &kp Z >;
-            };
-            redo {
-                key-positions = < 1 5 >;
-                bindings = < &kp Y >;
-            };
-        };
-
-        // -------------------------
-        // Layer 0 = BASE
-        // -------------------------
-        base {
-            display-name = "Base Layer";
-
-            /*
-            BASE ASCII
-            |  TAB  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  |  BSPC |
-            | LCTRL | A*  | S*  | D*  | F*  |  G  |   |  H*  | J*  | K*  | L*  | ;*  |  '   |
-            |  CAPS |  Z  |  X  |  C  |  V  |  B  |   |  N   |  M  |  ,  |  .  |  /  | ESC  |
-                                     | OS-CTRL | LALT/LWR | SPC/LIGHT | GUI/SYM | RSHIFT(NAV) | RET/FUN |
-            */
+            // -----------------------------------------------------------------------------------------
+            // |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
+            // | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
+            // | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
+            //                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
 
             bindings = <
-                &kp TAB &kp Q &kp W &kp E &kp R &kp T &kp Y &kp U &kp I &kp O &kp P &kp BSPC
-                &kp LCTRL &hrm_a &hrm_s &hrm_d &hrm_f &kp G &hrm_j &hrm_k &hrm_l &hrm_scln &kp SQT &kp SLSH
-                &kp CAPS &kp Z &kp X &kp C &kp V &kp B &kp N &kp M &kp COMMA &kp DOT &kp SLSH &kp ESC
-                &os_ctrl &lt 1 &kp LALT &lt 5 &kp SPC &lt 2 &kp LGUI &lt 3 &kp RSHIFT &lt 4 &kp RET
+            &kp TAB    &kp Q        &kp W             &kp E           &kp R           &kp T          &kp Y        &kp U              &kp I        &kp O    &kp P     &kp BSPC
+            &none      &mt LCTRL A  &mt LEFT_SHIFT S  &mt LEFT_ALT D  &mt LEFT_GUI F  &kp G          &kp H        &kp J              &kp K        &kp L    &kp SEMI  &kp SQT
+            &kp LSHFT  &kp Z        &kp X             &kp C           &kp V           &kp B          &kp N        &kp M              &kp COMMA    &kp DOT  &kp FSLH  &kp ESC
+                                                      &kp LCTRL       &lt 1 LEFT_ALT  &lt 5 SPACE    &lt 4 ENTER  &lt 3 RIGHT_SHIFT  &lt 2 RMETA
             >;
         };
 
-        // -------------------------
-        // Layer 1 = NUM
-        // -------------------------
-        num {
-            display-name = "NUM Layer";
+        Num {
+            display-name = "Num";
 
-            /*
-            NUM ASCII
-            | ALT_TAB | 1  | 2  | 3  | 4  | 5  |   | 6  | 7  | 8  | 9  | 0  | DEL |
-            | LCTRL   | BT0| BT1| BT2| BT3| BT4|   | LEFT| DOWN| UP | RIGHT| TRNS | TRNS|
-            | LSHIFT  | F1 | F2 | F3 | F4 | F5 |   | F6  | F7  | F8 | F9  | F10  | F11 |
-                                     | OS-CTRL | LALT/LWR | SPC/LIGHT | GUI/SYM | RSHIFT | RET/FUN |
-            */
+            // -----------------------------------------------------------------------------------------
+            // |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
+            // | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
+            // | SHFT |     |     |     |     |     |   |     |     |     |     |     |      |
+            //                    | GUI |     | SPC |   | ENT |     | ALT |
 
             bindings = <
-                &alt_tab &kp N1 &kp N2 &kp N3 &kp N4 &kp N5 &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp DEL
-                &kp LCTRL &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4 &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
-                &kp LSHFT &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11
-                &os_ctrl &lt 1 &kp LALT &lt 5 &kp SPC &lt 2 &kp LGUI &lt 3 &kp RSHIFT &lt 4 &kp RET
+            &kp LA(TAB)  &kp N1        &kp N2        &kp N3        &kp N4        &kp N5          &kp N6    &kp N7    &kp N8  &kp N9     &kp N0  &kp DEL
+            &kp LCTRL    &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT  &trans  &trans
+            &kp LSHFT    &trans        &trans        &trans        &trans        &trans          &trans    &trans    &trans  &trans     &trans  &trans
+                                                     &trans        &trans        &trans          &trans    &trans    &trans
             >;
         };
 
-        // -------------------------
-        // Layer 2 = SYM
-        // -------------------------
-        sym {
-            display-name = "SYM Layer";
+        Sym {
+            display-name = "Sym";
 
-            /*
-            SYM ASCII
-            | TAB  | ! | @ | # | $ | % |   | ^ | & | * | ( | ) | BSPC |
-            | LCTRL| TRNS...              | - | = | [ | ] | \ | ` |
-            | LSHIFT| TRNS...              | _ | + | { | } | | | ~ |
-                                     | OS-CTRL | LALT/LWR | SPC/LIGHT | GUI/SYM | RSHIFT | RET/FUN |
-            */
+            // -----------------------------------------------------------------------------------------
+            // |  TAB |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  | BKSP |
+            // | CTRL |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
+            // | SHFT |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
+            //                    | GUI |     | SPC |   | ENT |     | ALT |
 
             bindings = <
-                &kp TAB &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT &kp CARET &kp AMPS &kp ASTR &kp LPAR &kp RPAR &kp BSPC
-                &kp LCTRL &trans &trans &trans &trans &trans &kp MINUS &kp EQUAL &kp LBKT &kp RBKT &kp BSLH &kp GRAVE
-                &kp LSHFT &trans &trans &trans &trans &trans &kp UNDER &kp PLUS &kp LBRC &kp RBRC &kp PIPE &kp TILDE
-                &os_ctrl &lt 1 &kp LALT &lt 5 &kp SPC &lt 2 &kp LGUI &lt 3 &kp RSHIFT &lt 4 &kp RET
+            &kp TAB    &kp EXCL  &kp AT  &kp HASH  &kp DLLR  &kp PRCNT    &kp CARET  &kp AMPS   &kp KP_MULTIPLY  &kp LPAR  &kp RPAR  &kp BSPC
+            &kp LCTRL  &trans    &trans  &trans    &trans    &trans       &kp MINUS  &kp EQUAL  &kp LBKT         &kp RBKT  &kp BSLH  &kp GRAVE
+            &kp LSHFT  &trans    &trans  &trans    &trans    &trans       &kp UNDER  &kp PLUS   &kp LBRC         &kp RBRC  &kp PIPE  &kp TILDE
+                                         &trans    &trans    &trans       &trans     &trans     &trans
             >;
         };
 
-        // -------------------------
-        // Layer 3 = NAV
-        // -------------------------
-        nav {
-            display-name = "NAV Layer";
-
-            /*
-            NAV ASCII
-            | TAB | TRNS | TRNS | TRNS | TRNS | TRNS |   | HOME | PGUP | UP | PGDN | END | BSPC |
-            | LCTRL| ... |   | LEFT | DOWN | RIGHT | TRNS |
-            | LSHIFT| ... |
-                                     | OS-CTRL | LALT/LWR | SPC/LIGHT | GUI/SYM | RSHIFT | RET/FUN |
-            */
-
+        Nav {
+            display-name = "Nav";
             bindings = <
-                &kp TAB &trans &trans &trans &trans &trans &kp HOME &kp PGUP &kp UP &kp PGDN &kp END &kp BSPC
-                &kp LCTRL &trans &trans &trans &trans &trans &kp LEFT &kp DOWN &kp RIGHT &trans &trans &trans
-                &kp LSHFT &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &os_ctrl &lt 1 &kp LALT &lt 5 &kp SPC &lt 2 &kp LGUI &lt 3 &kp RSHIFT &lt 4 &kp RET
+            &trans  &trans  &trans  &trans  &trans  &trans    &kp PAGE_UP    &kp UP_ARROW  &kp HOME   &trans  &trans  &trans
+            &trans  &trans  &trans  &trans  &trans  &trans    &kp LEFT       &kp DOWN      &kp RIGHT  &trans  &trans  &trans
+            &trans  &trans  &trans  &trans  &trans  &trans    &kp PAGE_DOWN  &trans        &kp END    &trans  &trans  &trans
+                                    &trans  &trans  &trans    &trans         &trans        &trans
             >;
         };
 
-        // -------------------------
-        // Layer 4 = FUN
-        // -------------------------
-        fun {
-            display-name = "FUN Layer";
-
-            /*
-            FUN ASCII
-            | TAB  | TRNS... |
-            | LCTRL| ... BT_CLR ... |
-            | LSHIFT| RESET ... |
-                                     | OS-CTRL | LALT/LWR | SPC/LIGHT | GUI/SYM | RSHIFT | RET/FUN |
-            */
-
+        Func {
+            display-name = "Func";
             bindings = <
-                &kp TAB &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &kp LCTRL &trans &trans &trans &trans &trans &bt BT_CLR &bt BT_PAIR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3
-                &kp LSHFT &trans &trans &trans &trans &trans &kp RESET &trans &trans &trans &trans &trans
-                &os_ctrl &lt 1 &kp LALT &lt 5 &kp SPC &lt 2 &kp LGUI &lt 3 &kp RSHIFT &lt 4 &kp RET
+            &trans  &trans  &trans  &trans  &trans  &trans    &trans      &trans        &trans        &trans        &trans        &trans
+            &trans  &trans  &trans  &trans  &trans  &trans    &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+            &trans  &trans  &trans  &trans  &trans  &trans    &sys_reset  &trans        &trans        &trans        &trans        &trans
+                                    &trans  &trans  &trans    &trans      &trans        &trans
             >;
         };
 
-        // -------------------------
-        // Layer 5 = LIGHT
-        // -------------------------
-        light {
-            display-name = "LIGHT Layer";
-
-            /*
-            LIGHT ASCII
-            | TAB  | TRNS | TGL_K | TGL_U | TRNS | TRNS |   | TRNS | TRNS | TRNS | TRNS | TRNS | TRNS |
-            | LCTRL| TRNS | TRNS  | BRT_UP| BRT_DOWN|TRNS |   | RIPPLE| RAIN | SNAKE | SOL  | BREATHE | TRNS |
-            | LSHIFT| TRNS ... |
-                                     | OS-CTRL | LALT/LWR | SPC/LIGHT | GUI/SYM | RSHIFT | RET/FUN |
-            */
-
+        Light {
+            display-name = "Light";
             bindings = <
-                &kp TAB &trans &kp TGL_K &kp TGL_U &trans &trans &trans &trans &trans &trans &trans &trans
-                &kp LCTRL &trans &trans &kp BRT_UP &kp BRT_DOWN &trans &kp RIPPLE &kp RAIN &kp SNAKE &kp SOL &kp BREATHE &trans
-                &kp LSHFT &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &os_ctrl &lt 1 &kp LALT &lt 5 &kp SPC &lt 2 &kp LGUI &lt 3 &kp RSHIFT &lt 4 &kp RET
+            &trans  &trans      &trans           &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            &trans  &bl BL_TOG  &trans           &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            &trans  &bl BL_INC  &bl BL_DEC       &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+                                                 &trans  &trans  &trans    &trans  &trans  &trans
             >;
         };
-
     };
 };
 /* BS Corne bodge */
